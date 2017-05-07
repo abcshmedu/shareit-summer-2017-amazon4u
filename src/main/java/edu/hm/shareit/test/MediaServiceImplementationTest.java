@@ -11,9 +11,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for MediaServiceImplementation
+ */
 public class MediaServiceImplementationTest {
-    static final Book BOOK = new Book("title", "author", "978-3551551672");
-    static final Disc DISC = new Disc("Never gonna give you up", "Rick Astley", "1111111111111", 0);
+    private static final Book BOOK = new Book("title", "author", "978-3551551672");
+    private static final Disc DISC = new Disc("Never gonna give you up", "Rick Astley", "1111111111111", 0);
 
     @Test
     public void addNewBook() throws Exception {
