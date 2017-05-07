@@ -75,7 +75,9 @@ public enum MediaServiceResult {
      * @return A response
      */
     private static Response response(Status status, String detail) {
-        return Response.status(status).entity(reason(status.getStatusCode(), detail)).build();
+        final String reason = reason(status.getStatusCode(), detail);
+        // return Resonse.status(status).entity(reason).build();
+        return Response.status(status).build();
     }
 
     /**

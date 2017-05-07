@@ -28,5 +28,4 @@ public class BookTest {
         Disc disc = new Disc("title","director","1231231231231",0);
         assertFalse(sut.equals(disc));
     }
-
 }
