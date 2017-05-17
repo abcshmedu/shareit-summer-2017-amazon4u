@@ -28,7 +28,7 @@ public enum MediaServiceResult {
     UNMATCHING_BARCODE(Status.BAD_REQUEST, response(Status.BAD_REQUEST, "No disc with that Barcode found"));
 
     private final Response.Status status;
-    private final Response response;
+    private final Response.ResponseBuilder response;
 
     /**
      * Constructor of MediaServiceResult.
@@ -36,7 +36,7 @@ public enum MediaServiceResult {
      * @param status   The status of the result
      * @param response The response of the result that will be build
      */
-    MediaServiceResult(Status status, Response response) {
+    MediaServiceResult(Status status, Response.ResponseBuilder response) {
         this.status = status;
         this.response = response;
     }
@@ -47,7 +47,7 @@ public enum MediaServiceResult {
      * @return The response
      */
     public Response getResponse() {
-        return this.response;
+        return this.response.build();
     }
 
     /**
@@ -74,13 +74,10 @@ public enum MediaServiceResult {
      * @param detail The detail about the response
      * @return A response
      */
-    private static Response response(Status status, String detail) {
+    private static Response.ResponseBuilder response(Status status, String detail) {
         final String reason = reason(status.getStatusCode(), detail);
-        System.out.println(reason);
-        final Response build = Response.status(status).entity(reason).build();
-
+        final Response.ResponseBuilder build = Response.status(status).entity(reason);
         return build;
-        //return Response.status(status).build();
     }
 
     /**
