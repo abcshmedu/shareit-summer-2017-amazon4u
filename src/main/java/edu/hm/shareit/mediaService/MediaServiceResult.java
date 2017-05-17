@@ -76,19 +76,22 @@ public enum MediaServiceResult {
      */
     private static Response response(Status status, String detail) {
         final String reason = reason(status.getStatusCode(), detail);
-        // return Resonse.status(status).entity(reason).build();
-        return Response.status(status).build();
+        System.out.println(reason);
+        final Response build = Response.status(status).entity(reason).build();
+
+        return build;
+        //return Response.status(status).build();
     }
 
     /**
-     * Given a reason it will build an error message as JSON object.
+     * Given a reason it will build an error detail as JSON object.
      *
      * @param code   The code
      * @param detail The reason why the error occured
-     * @return JSON object of the error message
+     * @return JSON object of the error detail
      */
     public static String reason(int code, String detail) {
-        return convertToJson(new Object[]{code, detail});
+        return convertToJson(new ResponseMessage(code, detail));
     }
 
     /**
@@ -104,6 +107,29 @@ public enum MediaServiceResult {
         } catch (Exception e) {
             System.out.println("MediaServiceResult >>> convertToJson() >> Error");
             return "";
+        }
+    }
+
+    static class ResponseMessage {
+        final String code;
+        final String detail;
+
+        public ResponseMessage (){
+            this.code = "";
+            this.detail = "";
+        }
+
+        public ResponseMessage(int code, String message) {
+            this.code = "" + code;
+            this.detail = message;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDetail() {
+            return detail;
         }
     }
 }
