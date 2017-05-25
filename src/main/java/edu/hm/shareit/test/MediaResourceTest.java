@@ -2,24 +2,28 @@ package edu.hm.shareit.test;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.json.JSONObject;
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+
+
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.*;
 
 
 public class MediaResourceTest {
@@ -30,14 +34,14 @@ public class MediaResourceTest {
     static final String APP_URL = "/";
     static final int PORT = 8082;
     static final String WEBAPP_DIR = "./src/main/webapp/";
-    static Server jetty;
+    Server jetty;
     static final JSONObject BOOK_JSON = new JSONObject();
     static final Client CLIENT = ClientBuilder.newClient();
     static final WebTarget BOOK_TARGET = CLIENT.target("http://localhost:8082").path("shareit/media/books");
     static final WebTarget DISC_TARGET = CLIENT.target("http://localhost:8082").path("shareit/media/discs");
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         BOOK_JSON.put("title", BOOK.getTitle());
         BOOK_JSON.put("author", BOOK.getAuthor());
         BOOK_JSON.put("isbn", BOOK.getIsbn());
@@ -48,8 +52,8 @@ public class MediaResourceTest {
         //jetty.join();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         jetty.stop();
         jetty.join();
         //jetty.destroy();

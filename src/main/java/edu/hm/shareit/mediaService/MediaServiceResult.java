@@ -1,6 +1,7 @@
 package edu.hm.shareit.mediaService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.hm.shareit.auth.Token;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -25,7 +26,11 @@ public enum MediaServiceResult {
 
     UNMATCHING_ISBN(Status.BAD_REQUEST, response(Status.BAD_REQUEST, "No Book with that ISBN found")),
 
-    UNMATCHING_BARCODE(Status.BAD_REQUEST, response(Status.BAD_REQUEST, "No disc with that Barcode found"));
+    UNMATCHING_BARCODE(Status.BAD_REQUEST, response(Status.BAD_REQUEST, "No disc with that Barcode found")),
+
+    LOGIN_SUCCESS(Status.OK, response(new Token("asdfasdfRRF23dsfwdf2334143"))),
+
+    LOGIN_FAILURE(Status.NOT_FOUND, response(Status.NOT_FOUND, "username or password is incorrect"));
 
     private final Response.Status status;
     private final Response.ResponseBuilder response;
@@ -76,19 +81,22 @@ public enum MediaServiceResult {
      */
     private static Response.ResponseBuilder response(Status status, String detail) {
         final String reason = reason(status.getStatusCode(), detail);
-        final Response.ResponseBuilder build = Response.status(status).entity(reason);
-        return build;
+        return Response.status(status).entity(reason);
+    }
+
+    private static Response.ResponseBuilder response(Token token){
+        return Response.ok().entity(convertToJson(token));
     }
 
     /**
-     * Given a reason it will build an error detail as JSON object.
+     * Given a reason it will build an error message as JSON object.
      *
      * @param code   The code
      * @param detail The reason why the error occured
-     * @return JSON object of the error detail
+     * @return JSON object of the error message
      */
     public static String reason(int code, String detail) {
-        return convertToJson(new ResponseMessage(code, detail));
+        return convertToJson(new Object[]{code, detail});
     }
 
     /**
@@ -107,26 +115,7 @@ public enum MediaServiceResult {
         }
     }
 
-    static class ResponseMessage {
-        final String code;
-        final String detail;
-
-        public ResponseMessage (){
-            this.code = "";
-            this.detail = "";
-        }
-
-        public ResponseMessage(int code, String message) {
-            this.code = "" + code;
-            this.detail = message;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public String getDetail() {
-            return detail;
-        }
+    public static Response loginSuccess(Token token){
+        return Response.ok().entity(token).build();
     }
 }

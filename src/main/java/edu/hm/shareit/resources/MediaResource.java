@@ -9,16 +9,26 @@ import edu.hm.shareit.mediaService.MediaServiceImplementation;
 import edu.hm.shareit.mediaService.MediaServiceResult;
 
 import javax.ws.rs.*;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import javax.ws.rs.core.Context;
 
+import javax.ws.rs.client.Client;
 /** Web interface of application.
  *
  */
 @Path("media")
 public class MediaResource {
     private static MediaService mediaService = new MediaServiceImplementation();
+
+    public MediaResource() {
+        System.out.println("new instance of MediaResource");
+    }
 
     /**
      * Creates a book (not an exemplar).
@@ -30,7 +40,11 @@ public class MediaResource {
     @Path("books")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createBook(Book book) {
+    public Response createBook(Book book, @Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
+
         final MediaServiceResult msr = getMediaService().addBook(book);
         return msr.getResponse();
     }
@@ -45,7 +59,10 @@ public class MediaResource {
     @Path("discs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDisc(Disc disc) {
+    public Response createDisc(Disc disc,  @Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
         final MediaServiceResult msr = getMediaService().addDisc(disc);
         return msr.getResponse();
     }
@@ -58,7 +75,10 @@ public class MediaResource {
     @GET
     @Path("books")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBooks() {
+    public Response getBooks(@Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
         final Medium[] books = getMediaService().getBooks();
         final Object[] sortedBooks = Arrays.stream(books)
                 .sorted((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()))
@@ -69,13 +89,16 @@ public class MediaResource {
     /**
      * Show the book having the isbn.
      * REST interface: GET /media/books/{isbn}
-     * @param isbn Used to identify the book
      * @return The book
      */
     @GET
     @Path("books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(@PathParam("isbn") String isbn) {
+    public Response getBook(@PathParam("isbn") String isbn , @Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
+
         final Medium book = getMediaService().getBook(isbn);
         System.out.println(book);
         return book != null
@@ -91,7 +114,11 @@ public class MediaResource {
     @GET
     @Path("discs")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDiscs() {
+    public Response getDiscs(@Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
+
         final Medium[] discs = getMediaService().getDiscs();
         final Object[] sortedDiscs = Arrays.stream(discs)
                 .sorted((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()))
@@ -108,7 +135,7 @@ public class MediaResource {
     @GET
     @Path("discs/{barcode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDisc(@PathParam("barcode") String barcode) {
+    public Response getDisc(@PathParam("barcode") String barcode, @Context HttpHeaders headers) {
         System.out.println("IN get disc");
         final Medium disc = getMediaService().getDisc(barcode);
         System.out.println(disc);
@@ -128,7 +155,10 @@ public class MediaResource {
     @Path("books/{isbn}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBook(Book book, @PathParam("isbn") String isbn) {
+    public Response updateBook(Book book, @PathParam("isbn") String isbn, @Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
         System.out.println("MediaResource >>> updateBook >> ISBN: " + isbn);
         System.out.println("MediaResource >>> new Author and title: " + book.getAuthor() + " " + book.getTitle());
         MediaServiceResult msr = getMediaService()
@@ -147,7 +177,10 @@ public class MediaResource {
     @Path("discs/{barcode}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateDisc(Disc disc, @PathParam("barcode") String barcode) {
+    public Response updateDisc(Disc disc, @PathParam("barcode") String barcode, @Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
         System.out.println("MediaResource >>> updateDisc >> Barcode: " + barcode);
         System.out.println("MediaResource >>> new Director, Fsk and title: " + disc.getDirector() + disc.getFsk() + disc.getTitle());
         MediaServiceResult msr = getMediaService()
@@ -179,6 +212,20 @@ public class MediaResource {
             return "";
         }
     }
+
+    private boolean isValid(HttpHeaders headers) {
+        String token = headers.getRequestHeader("Token").get(0);
+        System.out.println("MediaResource >>> isValid >>> " + token);
+
+        WebTarget authTarget = ClientBuilder.newClient().target("http://localhost:8080").path("shareit/auth/authorize");
+        Response response = authTarget.request(MediaType.APPLICATION_JSON_TYPE).header("Token", token).get();
+        System.out.println("MediaResource >>> isValid >>> Response: " + response.getStatus());
+        if(response.getStatus() == 200) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Getter for the mediaService.
