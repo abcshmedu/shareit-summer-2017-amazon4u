@@ -81,25 +81,25 @@ public class MediaResourceTest {
     public void createBookStatus() throws Exception {
         reset();
         Response want = Response.ok().build();
-        Response have = BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
+        Response have = BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
         assertEquals(want.getStatus(),have.getStatus());
     }
 
     @Test
     public void getBookCompareStatus() throws Exception {
         reset();
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
         Response want = Response.ok().entity(BOOK).build();
-        Response have = BOOK_TARGET.path("978-3551551672").request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response have = BOOK_TARGET.path("978-3551551672").request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").get();
         assertEquals(want.getStatus(),have.getStatus());
     }
 
     @Test
     public void getBookCompareJson() throws Exception {
         reset();
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
         String want = convertToJson(BOOK);
-        Response response = BOOK_TARGET.path(BOOK.getIsbn()).request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response response = BOOK_TARGET.path(BOOK.getIsbn()).header("Token","DebugToken").request(MediaType.APPLICATION_JSON_TYPE).get();
         String have = response.readEntity(String.class);
         assertEquals(want,have);
     }
@@ -107,20 +107,20 @@ public class MediaResourceTest {
     @Test
     public void getBooksCompareStatus() throws Exception {
         reset();
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(ANOTHER_BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(ANOTHER_BOOK,MediaType.APPLICATION_JSON_TYPE));
         Response want = Response.ok().entity(BOOK).build();
-        Response have = BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response have = BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").get();
         assertEquals(want.getStatus(),have.getStatus());
     }
 
     @Test
     public void updateBookCompareStatus() throws Exception {
         reset();
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
-        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(ANOTHER_BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(BOOK,MediaType.APPLICATION_JSON_TYPE));
+        BOOK_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(ANOTHER_BOOK,MediaType.APPLICATION_JSON_TYPE));
         Response want = Response.ok().entity(BOOK).build();
-        Response have = BOOK_TARGET.path(BOOK.getIsbn()).request(MediaType.APPLICATION_JSON_TYPE)
+        Response have = BOOK_TARGET.path(BOOK.getIsbn()).request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken")
                 .put(Entity.entity(new Book("Rick","Roll",BOOK.getIsbn()),MediaType.APPLICATION_JSON_TYPE));
         assertEquals(want.getStatus(),have.getStatus());
     }
