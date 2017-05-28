@@ -2,7 +2,6 @@ package edu.hm.shareit.test;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import org.eclipse.jetty.server.Server;
