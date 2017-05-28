@@ -62,7 +62,7 @@ public class MediaResourceTest {
 
     private void reset() throws Exception {
         WebTarget target = CLIENT.target("http://localhost:8082").path("shareit/media");
-        target.request().delete();
+        target.request().header("Token","DebugToken").delete();
     }
 
 

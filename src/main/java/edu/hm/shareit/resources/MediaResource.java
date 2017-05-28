@@ -46,6 +46,7 @@ public class MediaResource {
         }
 
         final MediaServiceResult msr = getMediaService().addBook(book);
+        System.out.println(msr);
         return msr.getResponse();
     }
 
@@ -192,9 +193,15 @@ public class MediaResource {
      * Purge all existing data.
      */
     @DELETE
-    public void purge() {
-       this.mediaService = new MediaServiceImplementation();
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response purge(@Context HttpHeaders headers) {
+        if(!isValid(headers)) {
+            return MediaServiceResult.FORBIDDEN.getResponse();
+        }
+        this.mediaService = new MediaServiceImplementation();
         System.out.println("PURGE ALL");
+        return MediaServiceResult.OK.getResponse();
     }
 
     /**
