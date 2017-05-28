@@ -17,7 +17,8 @@ public class MediaServiceImplementation implements MediaService {
     private final Collection<Disc> discs = new HashSet<>();
 
     @Override
-    public MediaServiceResult addBook(Book book) {
+    public MediaServiceResult addBook(Book b) {
+        Book book = new Book(b);
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -46,7 +47,8 @@ public class MediaServiceImplementation implements MediaService {
     }
 
     @Override
-    public MediaServiceResult addDisc(Disc disc) {
+    public MediaServiceResult addDisc(Disc d) {
+        Disc disc = new Disc(d);
         if (disc == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -70,7 +72,8 @@ public class MediaServiceImplementation implements MediaService {
     }
 
     @Override
-    public MediaServiceResult updateBook(Book book) {
+    public MediaServiceResult updateBook(Book b) {
+        Book book = new Book(b);
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -85,7 +88,8 @@ public class MediaServiceImplementation implements MediaService {
     }
 
     @Override
-    public MediaServiceResult updateDisc(Disc disc) {
+    public MediaServiceResult updateDisc(Disc d) {
+        Disc disc = new Disc(d);
         if (disc == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -164,7 +168,7 @@ public class MediaServiceImplementation implements MediaService {
             return false;
         }
 
-        isbn = isbn.replaceAll("-", "");
+
 
         final int isbnLength = 13;
         if (isbn.length() != isbnLength) {

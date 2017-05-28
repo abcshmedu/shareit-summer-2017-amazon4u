@@ -32,6 +32,21 @@ public class Book extends Medium {
     }
 
     /**
+     * Copy ctor
+     * @param book
+     */
+    public Book(Book book) {
+        super(book.getTitle());
+        if (book.getAuthor() == null || book.getIsbn() == null) {
+            throw new NullPointerException();
+        }
+
+        this.author = book.getAuthor();
+        this.isbn = book.getIsbn().replaceAll("-","");
+
+    }
+
+    /**
      * Setter for author.
      *
      * @param author The author

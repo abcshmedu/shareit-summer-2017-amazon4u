@@ -35,6 +35,7 @@ public class Disc extends Medium {
      */
     public Disc(String title, String director, String barcode, int fsk) {
         super(title);
+        barcode = barcode.replaceAll("-", "");
         if (barcode == null || director == null) {
             throw new NullPointerException();
         }
@@ -42,6 +43,22 @@ public class Disc extends Medium {
         this.director = director;
         this.fsk = fsk;
     }
+
+    /**
+     * Copy ctor
+     * @param disc
+     */
+    public Disc(Disc disc) {
+        super(disc.getTitle());
+        if (disc.getBarcode() == null || disc.getDirector() == null) {
+            throw new NullPointerException();
+        }
+
+        this.director = disc.getDirector();
+        this.barcode = disc.getBarcode().replaceAll("-","");
+        this.fsk = disc.getFsk();
+    }
+
 
     /**
      * Setter for fks.
