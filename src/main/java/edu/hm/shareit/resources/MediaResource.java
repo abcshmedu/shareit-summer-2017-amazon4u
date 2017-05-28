@@ -214,7 +214,10 @@ public class MediaResource {
     }
 
     private boolean isValid(HttpHeaders headers) {
+        if(headers.getRequestHeader("Token") == null)
+            return false;
         String token = headers.getRequestHeader("Token").get(0);
+
         System.out.println("MediaResource >>> isValid >>> " + token);
 
         WebTarget authTarget = ClientBuilder.newClient().target("http://localhost:8080").path("shareit/auth/authorize");
