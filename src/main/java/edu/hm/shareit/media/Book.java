@@ -1,10 +1,21 @@
 package edu.hm.shareit.media;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * A class for books.
  */
+
+@Entity
+@Table(name="TBook")
 public class Book extends Medium {
+    @Column(name = "author")
     private String author;
+    @Id
     private final String isbn;
 
     /**

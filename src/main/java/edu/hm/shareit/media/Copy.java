@@ -1,11 +1,19 @@
 package edu.hm.shareit.media;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * An exemplar of a medium bound to an owner.
  */
+@Entity
+@Table(name = "TCopy")
 public class Copy {
 
+    @Column(name = "medium")
     private final Medium medium;
+    @Column(name = "owner")
     private final String owner;
 
     /**

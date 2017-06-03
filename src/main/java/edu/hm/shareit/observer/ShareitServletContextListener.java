@@ -31,7 +31,7 @@ public class ShareitServletContextListener
      *
      * @return Injector instance.
      */
-    static Injector getInjectorInstance() {
+    public static Injector getInjectorInstance() {
         return injector;
     }
 }

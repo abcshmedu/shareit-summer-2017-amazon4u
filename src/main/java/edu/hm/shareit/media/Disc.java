@@ -1,20 +1,30 @@
 package edu.hm.shareit.media;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * A Class for Discs.
  */
+@Entity
+@Table(name = "TDisc")
 public class Disc extends Medium {
     /**
      * Barcode of Disc.
      */
+    @Id
     private final String barcode;
     /**
      * Director of Disc.
      */
+    @Column(name = "director")
     private String director;
     /**
      * Fsk of Disc.
      */
+    @Column(name = "fsk")
     private int fsk;
 
     /**

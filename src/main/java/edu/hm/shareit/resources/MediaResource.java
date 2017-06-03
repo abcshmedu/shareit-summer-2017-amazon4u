@@ -227,7 +227,7 @@ public class MediaResource {
 
         System.out.println("MediaResource >>> isValid >>> " + token);
 
-        WebTarget authTarget = ClientBuilder.newClient().target("https://amazon4auth.herokuapp.com/").path("shareit/auth/authorize");
+        WebTarget authTarget = ClientBuilder.newClient().target("https://ancient-reaches-74529.herokuapp.com/").path("shareit/auth/authorize");
         Response response = authTarget.request(MediaType.APPLICATION_JSON_TYPE).header("Token", token).get();
         System.out.println("MediaResource >>> isValid >>> Response: " + response.getStatus());
         if(response.getStatus() == 200) {

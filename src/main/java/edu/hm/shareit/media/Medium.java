@@ -1,13 +1,19 @@
 package edu.hm.shareit.media;
 
+import javax.persistence.*;
+
 /**
  * Abstract class for media with title.
  */
+@Entity
+@Table(name = "TMedium")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Medium {
 
     /**
      * Title of the medium.
      */
+    @Column(name = "title")
     private String title;
 
     /**

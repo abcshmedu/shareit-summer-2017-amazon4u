@@ -42,4 +42,11 @@
         <url-pattern>/shareit/*</url-pattern>
 
     </servlet-mapping>
+
+    <listener>
+        <listener-class>
+            edu.hm.shareit.observer.ShareitServletContextListener
+        </listener-class>
+    </listener>
+
 </web-app>
