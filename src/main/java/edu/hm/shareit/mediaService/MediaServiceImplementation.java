@@ -31,13 +31,13 @@ public class MediaServiceImplementation implements MediaService {
     }
 
 
-    private SessionFactory getSession() {
-        return this.session;
+    private Session getSession() {
+        return this.session.getCurrentSession();
     }
 
 
     private void insert(Object toBeInserted) {
-        try (Session entityManager = getSession().getCurrentSession()) {
+        try (Session entityManager = getSession()) {
             final Transaction transaction = entityManager.beginTransaction();
             entityManager.persist(toBeInserted);
             transaction.commit();
@@ -49,7 +49,7 @@ public class MediaServiceImplementation implements MediaService {
     private void update(Object toBeUpdated) {
 
         try (final Session entityManager =
-                     getSession().getCurrentSession()) {
+                     getSession()) {
             Transaction transaction = entityManager.beginTransaction();
             entityManager.merge(toBeUpdated);
             transaction.commit();
@@ -179,12 +179,12 @@ return books;
     @Override
     public Medium[] getBooks() {
         List<Book> bookQuery = new ArrayList<>();
-        CriteriaBuilder criteriaBuilder = getSession().getCurrentSession().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
 
         criteriaQuery.from(Book.class);
 
-        Query<Book> query = getSession().getCurrentSession().createQuery(criteriaQuery);
+        Query<Book> query = getSession().createQuery(criteriaQuery);
         bookQuery = query.getResultList();
 
 
