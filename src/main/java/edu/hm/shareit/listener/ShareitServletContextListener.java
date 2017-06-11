@@ -11,8 +11,7 @@ import edu.hm.shareit.mediaService.MediaServiceImplementation;
  * Context Listener to enable usage of google guice together with jersey.
  */
 public class ShareitServletContextListener extends GuiceServletContextListener {
-    private static final Injector injector
-            = Guice.createInjector(new ServletModule() {
+    private static final Injector injector = Guice.createInjector(new ServletModule() {
         @Override
         protected void configureServlets() {
             bind(MediaService.class).to(MediaServiceImplementation.class);

@@ -1,6 +1,7 @@
 package edu.hm.shareit.media;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Abstract class for media with title.
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TMedium")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Medium {
+public abstract class Medium implements Serializable {
 
     /**
      * Title of the medium.

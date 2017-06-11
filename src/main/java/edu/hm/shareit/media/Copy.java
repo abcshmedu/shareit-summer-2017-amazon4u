@@ -3,13 +3,14 @@ package edu.hm.shareit.media;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * An exemplar of a medium bound to an owner.
  */
 @Entity
 @Table(name = "TCopy")
-public class Copy {
+public class Copy implements Serializable {
 
     @Column(name = "medium")
     private final Medium medium;
