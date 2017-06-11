@@ -194,8 +194,7 @@ public class MediaServiceImplementation implements MediaService {
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
         Root<Book> root = criteriaQuery.from(Book.class);
 
-        criteriaQuery = criteriaQuery.where(criteriaBuilder.equal(root.get(isbn), isbn));
-
+        criteriaQuery = criteriaQuery.where(criteriaBuilder.equal(root.get("isbn"), isbn));
 
         Query<Book> query = getSession().createQuery(criteriaQuery);
 
