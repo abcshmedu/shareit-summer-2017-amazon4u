@@ -3,19 +3,17 @@ package edu.hm.shareit.mediaService;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
-
-import java.util.*;
-import java.util.function.Supplier;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * The implementation of the MediaService interface.
@@ -30,12 +28,10 @@ public class MediaServiceImplementation implements MediaService {
         this.session = new Configuration().configure().buildSessionFactory();
     }
 
-
     private Session getSession() {
         return this.session.getCurrentSession();
     }
-
-
+    
     private void insert(Object toBeInserted) {
         try (Session entityManager = getSession()) {
             final Transaction transaction = entityManager.beginTransaction();
@@ -57,11 +53,6 @@ public class MediaServiceImplementation implements MediaService {
             exception.printStackTrace();
         }
     }
-
-
-
-
-
 
     @Override
     public MediaServiceResult addBook(Book b) {
@@ -154,8 +145,6 @@ public class MediaServiceImplementation implements MediaService {
         return MediaServiceResult.OK;
     }
 
-
-
     @Override
     public Medium[] getBooks() {
         List<Book> bookQuery;
@@ -182,10 +171,10 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium getBook(String isbn) {
-        final Book[] books = (Book[])getBooks();
+        final Book[] books = (Book[]) getBooks();
         Book result = null;
-        for(Book book: books){
-            if(book.getIsbn().equals(isbn)){
+        for (Book book : books) {
+            if (book.getIsbn().equals(isbn)) {
                 result = book;
                 break;
             }
@@ -195,10 +184,10 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium getDisc(String barcode) {
-        final Disc[] discs = (Disc[])getDiscs();
+        final Disc[] discs = (Disc[]) getDiscs();
         Disc result = null;
-        for(Disc disc: discs){
-            if(disc.getBarcode().equals(barcode)){
+        for (Disc disc : discs) {
+            if (disc.getBarcode().equals(barcode)) {
                 result = disc;
                 break;
             }
@@ -234,7 +223,6 @@ public class MediaServiceImplementation implements MediaService {
         if (isbn == null) {
             return false;
         }
-
 
 
         final int isbnLength = 13;
