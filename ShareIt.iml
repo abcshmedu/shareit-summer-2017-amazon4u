@@ -14,6 +14,7 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
+          <unit-entry name="edu:hm:shareit:config:hibernate.cfg.xml" />
           <unit-entry name="edu:hm:shareit:config:hibernate.cfg.xml.tld" />
         </datasource-map>
         <naming-strategy-map />

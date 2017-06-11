@@ -17,6 +17,7 @@ public abstract class Medium implements Serializable {
     @Column(name = "title")
     private String title;
 
+
     /**
      * Contructor to create a medium
      * (not to be mistaken as an exemplar).
