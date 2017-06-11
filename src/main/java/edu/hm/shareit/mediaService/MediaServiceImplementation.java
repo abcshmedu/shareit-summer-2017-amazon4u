@@ -155,30 +155,10 @@ public class MediaServiceImplementation implements MediaService {
     }
 
 
-    /*
-
-try (final Session entityManager = getSessionFactory().getCurrentSession()) {
-        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Book> criteriaQuery = builder.createQuery(Book.class);
-
-        criteriaQuery.from(Book.class);
-//    		final Root<Book> root = criteriaQuery.from(Book.class);
-//    		query.where(builder.equal(root.get("firstName"), "Neville"));
-        final Query<Book> query = entityManager.createQuery(criteriaQuery);
-        books = query.getResultList();
-
-//    		final String queryString = "FROM Book";
-//    		final Query<Book> query = entityManager.createQuery(queryString);
-//    		books = query.list();
-    } catch (final Exception exception) {
-        exception.printStackTrace();
-    }
-return books;
- */
 
     @Override
     public Medium[] getBooks() {
-        List<Book> bookQuery = new ArrayList<>();
+        List<Book> bookQuery;
         CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
 
@@ -194,7 +174,18 @@ return books;
 
     @Override
     public Medium[] getDiscs() {
-        return getDiscsCollection().toArray(new Medium[0]);
+        List<Disc> discQuery;
+        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+        CriteriaQuery<Disc> criteriaQuery = criteriaBuilder.createQuery(Disc.class);
+
+        criteriaQuery.from(Disc.class);
+
+        Query<Disc> query = getSession().createQuery(criteriaQuery);
+        discQuery = query.getResultList();
+
+
+        return discQuery.toArray(new Disc[0]);
+        //return getDiscsCollection().toArray(new Medium[0]);
     }
 
     @Override
