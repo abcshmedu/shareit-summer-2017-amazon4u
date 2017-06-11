@@ -8,13 +8,42 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.function.Supplier;
-
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 /**
  * The implementation of the MediaService interface.
  */
 public class MediaServiceImplementation implements MediaService {
     private final Collection<Book> books = new HashSet<>();
     private final Collection<Disc> discs = new HashSet<>();
+
+    private final SessionFactory session;
+
+    public MediaServiceImplementation() {
+        this.session = new Configuration().configure().buildSessionFactory();
+    }
+
+
+    private SessionFactory getSession() {
+        return this.session;
+    }
+
+
+    private void insert(Object toBeInserted) {
+        try (Session entityManager = getSession().getCurrentSession()) {
+            final Transaction transaction = entityManager.beginTransaction();
+            entityManager.persist(toBeInserted);
+            transaction.commit();
+        } catch (Exception exception) {
+            done = false;
+            exception.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public MediaServiceResult addBook(Book b) {
