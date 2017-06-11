@@ -18,13 +18,6 @@ public abstract class Medium implements Serializable {
     private String title;
 
     /**
-     * Default constructor for Jackson.
-     */
-    private Medium() {
-        this.title = "These aren't the Droids you are looking for!";
-    }
-
-    /**
      * Contructor to create a medium
      * (not to be mistaken as an exemplar).
      *
@@ -35,6 +28,13 @@ public abstract class Medium implements Serializable {
             throw new NullPointerException();
         }
         this.title = title;
+    }
+
+    /**
+     * Default constructor for Jackson.
+     */
+    protected Medium() {
+        this.title = "These aren't the Droids you are looking for!";
     }
 
     /**
@@ -70,5 +70,17 @@ public abstract class Medium implements Serializable {
     @Override
     public int hashCode() {
         return title.hashCode();
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
