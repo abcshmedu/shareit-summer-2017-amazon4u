@@ -4,21 +4,25 @@ import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 /**
  * The implementation of the MediaService interface.
  */
 public class MediaServiceImplementation implements MediaService {
-    private final Collection<Book> books = new HashSet<>();
-    private final Collection<Disc> discs = new HashSet<>();
+    //private final Collection<Book> books = new HashSet<>();
+    //private final Collection<Disc> discs = new HashSet<>();
 
     private final SessionFactory session;
 
@@ -37,16 +41,31 @@ public class MediaServiceImplementation implements MediaService {
             final Transaction transaction = entityManager.beginTransaction();
             entityManager.persist(toBeInserted);
             transaction.commit();
-        } catch (Exception exception) {
-            done = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void update(Object toBeUpdated) {
+
+        try (final Session entityManager =
+                     getSession().getCurrentSession()) {
+            Transaction transaction = entityManager.beginTransaction();
+            entityManager.merge(toBeUpdated);
+            transaction.commit();
+        } catch (final Exception exception) {
             exception.printStackTrace();
         }
     }
 
 
 
+
+
+
     @Override
     public MediaServiceResult addBook(Book b) {
+
         Book book = new Book(b);
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
@@ -67,7 +86,8 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.ALREADY_EXISTS;
         }
 
-        getBooksCollection().add(book);
+        //getBooksCollection().add(book);
+        insert(book);
         System.out.println("MediaServiceResult >>> addBook() -> book has been added");
         System.out.println("MediaServiceResult >>> addBook() -> current size "
                 + getBooksCollection().size());
@@ -95,8 +115,8 @@ public class MediaServiceImplementation implements MediaService {
         if (getDiscsCollection().contains(disc)) {
             return MediaServiceResult.ALREADY_EXISTS;
         }
-
-        getDiscsCollection().add(disc);
+        insert(disc);
+        //getDiscsCollection().add(disc);
         return MediaServiceResult.OK;
     }
 
@@ -113,6 +133,7 @@ public class MediaServiceImplementation implements MediaService {
         }
         toBeUpdated.setAuthor(book.getAuthor());
         toBeUpdated.setTitle(book.getTitle());
+
         return MediaServiceResult.OK;
     }
 
@@ -133,9 +154,42 @@ public class MediaServiceImplementation implements MediaService {
         return MediaServiceResult.OK;
     }
 
+
+    /*
+
+try (final Session entityManager = getSessionFactory().getCurrentSession()) {
+        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Book> criteriaQuery = builder.createQuery(Book.class);
+
+        criteriaQuery.from(Book.class);
+//    		final Root<Book> root = criteriaQuery.from(Book.class);
+//    		query.where(builder.equal(root.get("firstName"), "Neville"));
+        final Query<Book> query = entityManager.createQuery(criteriaQuery);
+        books = query.getResultList();
+
+//    		final String queryString = "FROM Book";
+//    		final Query<Book> query = entityManager.createQuery(queryString);
+//    		books = query.list();
+    } catch (final Exception exception) {
+        exception.printStackTrace();
+    }
+return books;
+ */
+
     @Override
     public Medium[] getBooks() {
-        return getBooksCollection().toArray(new Medium[0]);
+        List<Book> books = new ArrayList<>();
+        CriteriaBuilder criteriaBuilder = getSession().getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+
+        criteriaQuery.from(Book.class);
+
+        Query<Book> query = getSession().getCurrentSession().createQuery(criteriaQuery);
+        books = query.getResultList();
+
+
+        return books.toArray(new Book[0]);
+        //return getBooksCollection().toArray(new Medium[0]);
     }
 
     @Override
