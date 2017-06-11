@@ -1,4 +1,4 @@
-package edu.hm.shareit.observer;
+package edu.hm.shareit.listener;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -10,8 +10,7 @@ import edu.hm.shareit.mediaService.MediaServiceImplementation;
 /**
  * Context Listener to enable usage of google guice together with jersey.
  */
-public class ShareitServletContextListener
-        extends GuiceServletContextListener {
+public class ShareitServletContextListener extends GuiceServletContextListener {
     private static final Injector injector
             = Guice.createInjector(new ServletModule() {
         @Override

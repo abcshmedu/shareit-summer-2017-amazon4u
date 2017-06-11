@@ -45,7 +45,7 @@
 
     <listener>
         <listener-class>
-            edu.hm.shareit.observer.ShareitServletContextListener
+            edu.hm.shareit.listener.ShareitServletContextListener
         </listener-class>
     </listener>
 
