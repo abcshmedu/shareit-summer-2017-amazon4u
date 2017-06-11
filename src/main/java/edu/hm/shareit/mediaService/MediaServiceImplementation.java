@@ -189,32 +189,15 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium getBook(String isbn) {
-        List<Book> bookQuery;
-        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
-        Root<Book> root = criteriaQuery.from(Book.class);
-
-        criteriaQuery = criteriaQuery.where(criteriaBuilder.equal(root.get("isbn"), isbn));
-
-        Query<Book> query = getSession().createQuery(criteriaQuery);
-
-        bookQuery = query.getResultList();
-
-        Book[] book = bookQuery.toArray(new Book[0]);
-        return book.length == 0 ? null : book[0];
-
-
-        /*
-        Supplier<Optional<Book>> supplier = () -> getBooksCollection()
-                .parallelStream()
-                .filter(book -> book.getIsbn().equals(isbn))
-                .findFirst();
-
-        if (supplier.get().isPresent()) {
-            return supplier.get().get();
+        final Book[] books = (Book[])getBooks();
+        Book result = null;
+        for(Book book: books){
+            if(book.getIsbn().equals(isbn)){
+                result = book;
+                break;
+            }
         }
-        return null;
-        */
+        return result;
     }
 
     @Override
