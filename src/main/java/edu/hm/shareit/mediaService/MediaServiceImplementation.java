@@ -162,14 +162,10 @@ public class MediaServiceImplementation implements MediaService {
         CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
 
-
-
         Query<Book> query = getSession().createQuery(criteriaQuery);
         bookQuery = query.getResultList();
 
-
         return bookQuery.toArray(new Book[0]);
-        //return getBooksCollection().toArray(new Medium[0]);
     }
 
     @Override
@@ -178,13 +174,10 @@ public class MediaServiceImplementation implements MediaService {
         CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Disc> criteriaQuery = criteriaBuilder.createQuery(Disc.class);
 
-
-
         Query<Disc> query = getSession().createQuery(criteriaQuery);
         discQuery = query.getResultList();
 
         return discQuery.toArray(new Disc[0]);
-        //return getDiscsCollection().toArray(new Medium[0]);
     }
 
     @Override
@@ -202,14 +195,15 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium getDisc(String barcode) {
-        Supplier<Optional<Disc>> supplier = () -> getDiscsCollection()
-                .parallelStream()
-                .filter(disc -> disc.getBarcode().equals(barcode))
-                .findFirst();
-        if (supplier.get().isPresent()) {
-            return supplier.get().get();
+        final Disc[] discs = (Disc[])getDiscs();
+        Disc result = null;
+        for(Disc disc: discs){
+            if(disc.getBarcode().equals(barcode)){
+                result = disc;
+                break;
+            }
         }
-        return null;
+        return result;
     }
 
     /**
