@@ -162,7 +162,7 @@ public class MediaServiceImplementation implements MediaService {
         CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
 
-        criteriaQuery.from(Book.class);
+
 
         Query<Book> query = getSession().createQuery(criteriaQuery);
         bookQuery = query.getResultList();
@@ -178,11 +178,10 @@ public class MediaServiceImplementation implements MediaService {
         CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
         CriteriaQuery<Disc> criteriaQuery = criteriaBuilder.createQuery(Disc.class);
 
-        criteriaQuery.from(Disc.class);
+
 
         Query<Disc> query = getSession().createQuery(criteriaQuery);
         discQuery = query.getResultList();
-
 
         return discQuery.toArray(new Disc[0]);
         //return getDiscsCollection().toArray(new Medium[0]);
@@ -190,6 +189,23 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium getBook(String isbn) {
+        List<Book> bookQuery;
+        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+        Root<Book> root = criteriaQuery.from(Book.class);
+
+        criteriaQuery = criteriaQuery.where(criteriaBuilder.equal(root.get(isbn), isbn));
+
+
+        Query<Book> query = getSession().createQuery(criteriaQuery);
+
+        bookQuery = query.getResultList();
+
+        Book[] book = bookQuery.toArray(new Book[0]);
+        return book.length == 0 ? null : book[0];
+
+
+        /*
         Supplier<Optional<Book>> supplier = () -> getBooksCollection()
                 .parallelStream()
                 .filter(book -> book.getIsbn().equals(isbn))
@@ -199,6 +215,7 @@ public class MediaServiceImplementation implements MediaService {
             return supplier.get().get();
         }
         return null;
+        */
     }
 
     @Override
