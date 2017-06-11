@@ -21,8 +21,8 @@ import javax.persistence.criteria.Root;
  * The implementation of the MediaService interface.
  */
 public class MediaServiceImplementation implements MediaService {
-    //private final Collection<Book> books = new HashSet<>();
-    //private final Collection<Disc> discs = new HashSet<>();
+    private final Collection<Book> books = new HashSet<>();
+    private final Collection<Disc> discs = new HashSet<>();
 
     private final SessionFactory session;
 
@@ -178,17 +178,17 @@ return books;
 
     @Override
     public Medium[] getBooks() {
-        List<Book> books = new ArrayList<>();
+        List<Book> bookQuery = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = getSession().getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
 
         criteriaQuery.from(Book.class);
 
         Query<Book> query = getSession().getCurrentSession().createQuery(criteriaQuery);
-        books = query.getResultList();
+        bookQuery = query.getResultList();
 
 
-        return books.toArray(new Book[0]);
+        return bookQuery.toArray(new Book[0]);
         //return getBooksCollection().toArray(new Medium[0]);
     }
 
