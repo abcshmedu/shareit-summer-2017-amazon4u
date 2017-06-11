@@ -30,7 +30,7 @@ public class Disc extends Medium {
     /**
      * <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Click me</a>
      */
-    private Disc() {
+    public Disc() {
         this("Never gonna", "give you", "up", 0);
     }
 
