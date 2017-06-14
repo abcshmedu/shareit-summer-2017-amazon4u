@@ -30,6 +30,8 @@ public class MediaResource implements Serializable {
 
     private MediaService mediaService;
 
+
+
     @Inject
     public MediaResource(MediaService mediaService) {
         System.out.println("new instance of MediaResource");
