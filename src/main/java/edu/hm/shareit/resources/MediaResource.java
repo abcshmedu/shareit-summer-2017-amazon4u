@@ -8,6 +8,7 @@ import edu.hm.shareit.mediaService.MediaService;
 import edu.hm.shareit.mediaService.MediaServiceImplementation;
 import edu.hm.shareit.mediaService.MediaServiceResult;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -15,24 +16,30 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
 import java.util.Arrays;
 import javax.ws.rs.core.Context;
 
 import javax.ws.rs.client.Client;
-/** Web interface of application.
- *
+
+/**
+ * Web interface of application.
  */
 @Path("media")
-public class MediaResource {
-    private static MediaService mediaService = new MediaServiceImplementation();
+public class MediaResource implements Serializable {
 
-    public MediaResource() {
+    private MediaService mediaService;
+
+    @Inject
+    public MediaResource(MediaService mediaService) {
         System.out.println("new instance of MediaResource");
+        this.mediaService = mediaService;
     }
 
     /**
      * Creates a book (not an exemplar).
      * REST interface: POST /media/books
+     *
      * @param book The book
      * @return Response success, failure, ...
      */
@@ -41,7 +48,7 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createBook(Book book, @Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
 
@@ -53,6 +60,7 @@ public class MediaResource {
     /**
      * Creates a disc (not an exemplar).
      * REST interface: POST /media/discs
+     *
      * @param disc The disc
      * @return Response success, failure, ...
      */
@@ -60,8 +68,8 @@ public class MediaResource {
     @Path("discs")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDisc(Disc disc,  @Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+    public Response createDisc(Disc disc, @Context HttpHeaders headers) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
         final MediaServiceResult msr = getMediaService().addDisc(disc);
@@ -71,13 +79,14 @@ public class MediaResource {
     /**
      * Show all books.
      * REST interface: GET /media/books
+     *
      * @return The books
      */
     @GET
     @Path("books")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks(@Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
         final Medium[] books = getMediaService().getBooks();
@@ -90,13 +99,14 @@ public class MediaResource {
     /**
      * Show the book having the isbn.
      * REST interface: GET /media/books/{isbn}
+     *
      * @return The book
      */
     @GET
     @Path("books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(@PathParam("isbn") String isbn , @Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+    public Response getBook(@PathParam("isbn") String isbn, @Context HttpHeaders headers) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
 
@@ -110,13 +120,14 @@ public class MediaResource {
     /**
      * Show all discs.
      * REST interface: GET /media/discs/
+     *
      * @return The discs
      */
     @GET
     @Path("discs")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDiscs(@Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
 
@@ -130,6 +141,7 @@ public class MediaResource {
     /**
      * Show the disc having the barcode.
      * REST interface: GET /media/discs/{barcode}
+     *
      * @param barcode Used to identify the disc
      * @return The disc
      */
@@ -148,6 +160,7 @@ public class MediaResource {
     /**
      * Update a the book having the isbn.
      * REST interface: PUT /media/books/{isbn}
+     *
      * @param book The book-update
      * @param isbn Used to identify the book
      * @return Response success, failure, ...
@@ -157,7 +170,7 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(Book book, @PathParam("isbn") String isbn, @Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
         System.out.println("MediaResource >>> updateBook >> ISBN: " + isbn);
@@ -170,6 +183,7 @@ public class MediaResource {
     /**
      * Update the disc having the barcode.
      * REST interface: PUT /media/discs/{barcode}
+     *
      * @param disc    The disc-update
      * @param barcode Used to identify the disc
      * @return Response success, failure, ...
@@ -179,7 +193,7 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateDisc(Disc disc, @PathParam("barcode") String barcode, @Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
         System.out.println("MediaResource >>> updateDisc >> Barcode: " + barcode);
@@ -196,7 +210,7 @@ public class MediaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response purge(@Context HttpHeaders headers) {
-        if(!isValid(headers)) {
+        if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
         this.mediaService = new MediaServiceImplementation();
@@ -221,7 +235,7 @@ public class MediaResource {
     }
 
     private boolean isValid(HttpHeaders headers) {
-        if(headers.getRequestHeader("Token") == null)
+        if (headers.getRequestHeader("Token") == null)
             return false;
         String token = headers.getRequestHeader("Token").get(0);
 
@@ -230,7 +244,7 @@ public class MediaResource {
         WebTarget authTarget = ClientBuilder.newClient().target("https://ancient-reaches-74529.herokuapp.com/").path("shareit/auth/authorize");
         Response response = authTarget.request(MediaType.APPLICATION_JSON_TYPE).header("Token", token).get();
         System.out.println("MediaResource >>> isValid >>> Response: " + response.getStatus());
-        if(response.getStatus() == 200) {
+        if (response.getStatus() == 200) {
             return true;
         }
         return false;

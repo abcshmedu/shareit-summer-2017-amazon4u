@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * Application class to enable guice within jersey.
  */
-class ShareItApplication extends ResourceConfig {
+public class ShareItApplication extends ResourceConfig {
 
     @Inject
     public ShareItApplication(ServiceLocator serviceLocator) {

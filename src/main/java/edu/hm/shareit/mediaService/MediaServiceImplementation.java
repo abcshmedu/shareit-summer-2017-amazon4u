@@ -31,7 +31,7 @@ public class MediaServiceImplementation implements MediaService {
     private Session getSession() {
         return this.session.getCurrentSession();
     }
-    
+
     private void insert(Object toBeInserted) {
         try (Session entityManager = getSession()) {
             final Transaction transaction = entityManager.beginTransaction();
@@ -43,21 +43,15 @@ public class MediaServiceImplementation implements MediaService {
     }
 
     private void update(Object toBeUpdated) {
-
-        try (final Session entityManager =
-                     getSession()) {
+        try (final Session entityManager = getSession()) {
             Transaction transaction = entityManager.beginTransaction();
             entityManager.merge(toBeUpdated);
             transaction.commit();
-        } catch (final Exception exception) {
-            exception.printStackTrace();
         }
     }
 
     @Override
-    public MediaServiceResult addBook(Book b) {
-
-        Book book = new Book(b);
+    public MediaServiceResult addBook(Book book) {
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -87,8 +81,7 @@ public class MediaServiceImplementation implements MediaService {
     }
 
     @Override
-    public MediaServiceResult addDisc(Disc d) {
-        Disc disc = new Disc(d);
+    public MediaServiceResult addDisc(Disc disc) {
         if (disc == null) {
             return MediaServiceResult.FORBIDDEN;
         }
