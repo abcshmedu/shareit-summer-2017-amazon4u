@@ -5,6 +5,7 @@ import javax.persistence.*;
 /**
  * A Class for Discs.
  */
+
 @Entity
 //@Table(name = "TDisc")
 public class Disc extends Medium {
@@ -12,17 +13,14 @@ public class Disc extends Medium {
      * Barcode of Disc.
      */
     @Id
-    @OneToOne
     private final String barcode;
     /**
      * Director of Disc.
      */
-    @Column(name = "director")
     private String director;
     /**
      * Fsk of Disc.
      */
-    @Column(name = "fsk")
     private int fsk;
 
     /**

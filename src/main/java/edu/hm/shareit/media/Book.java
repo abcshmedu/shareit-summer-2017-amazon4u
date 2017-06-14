@@ -9,10 +9,8 @@ import javax.persistence.*;
 @Entity
 //@Table(name="TBook")
 public class Book extends Medium {
-    @Column(name = "author")
     private String author;
     @Id
-    @Column(name = "isbn")
     private final String isbn;
 
     /**

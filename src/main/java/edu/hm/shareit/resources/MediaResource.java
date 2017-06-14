@@ -1,6 +1,7 @@
 package edu.hm.shareit.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
@@ -8,7 +9,6 @@ import edu.hm.shareit.mediaService.MediaService;
 import edu.hm.shareit.mediaService.MediaServiceImplementation;
 import edu.hm.shareit.mediaService.MediaServiceResult;
 
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
