@@ -52,27 +52,28 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public MediaServiceResult addBook(Book book) {
+
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
         }
-
-        if (book.getAuthor().equals("") || book.getTitle().equals("")) {
+        Book b = new Book(book);
+        if (b.getAuthor().equals("") || b.getTitle().equals("")) {
             System.out.println("MediaServiceResult >>> addBook() -> author or title missing");
             return MediaServiceResult.MISSING_ARG;
         }
 
-        if (!isValidISBN(book.getIsbn())) {
+        if (!isValidISBN(b.getIsbn())) {
             System.out.println("MediaServiceResult >>> addBook() -> Illegal ISBN");
             return MediaServiceResult.ILLEGAL_ISBN;
         }
 
-        if (getBooksCollection().contains(book)) {
+        if (getBooksCollection().contains(b)) {
             System.out.println("MediaServiceResult >>> addBook() -> Duplicate found");
             return MediaServiceResult.ALREADY_EXISTS;
         }
 
         //getBooksCollection().add(book);
-        insert(book);
+        insert(b);
         System.out.println("MediaServiceResult >>> addBook() -> book has been added");
         System.out.println("MediaServiceResult >>> addBook() -> current size "
                 + getBooksCollection().size());
@@ -85,21 +86,21 @@ public class MediaServiceImplementation implements MediaService {
         if (disc == null) {
             return MediaServiceResult.FORBIDDEN;
         }
-
-        if (disc.getDirector().equals("") || disc.getTitle().equals("")) {
+        Disc d = new Disc(disc);
+        if (d.getDirector().equals("") || d.getTitle().equals("")) {
             System.out.println("MediaServiceResult >>> addDisc() -> director or title missing");
             return MediaServiceResult.MISSING_ARG;
         }
 
-        if (!isValidBarcode(disc.getBarcode())) {
+        if (!isValidBarcode(d.getBarcode())) {
             System.out.println("MediaServiceResult >>> addDisc() -> Illegal Barcode");
             return MediaServiceResult.ILLEGAL_BARCODE;
         }
 
-        if (getDiscsCollection().contains(disc)) {
+        if (getDiscsCollection().contains(d)) {
             return MediaServiceResult.ALREADY_EXISTS;
         }
-        insert(disc);
+        insert(d);
         //getDiscsCollection().add(disc);
         return MediaServiceResult.OK;
     }
