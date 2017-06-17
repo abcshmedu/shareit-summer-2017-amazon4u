@@ -100,7 +100,6 @@ public class MediaServiceImplementation implements MediaService {
 
         insert(b);
         System.out.println("MediaServiceResult >>> addBook() -> book has been added");
-
         return MediaServiceResult.OK;
     }
 
@@ -135,12 +134,10 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.FORBIDDEN;
         }
         Book book = new Book(b);
-
         Book toBeUpdated = (Book) getBook(book.getIsbn());
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_ISBN;
         }
-
         update(book);
         return MediaServiceResult.OK;
     }
@@ -151,13 +148,11 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.FORBIDDEN;
         }
         Disc disc = new Disc(d);
-
         Disc toBeUpdated = (Disc) getDisc(disc.getBarcode());
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_BARCODE;
         }
         update(disc);
-
         return MediaServiceResult.OK;
     }
 
@@ -166,13 +161,11 @@ public class MediaServiceImplementation implements MediaService {
         Session entityManager = getSession();
         entityManager.beginTransaction();
         List<Book> bookQuery;
-
         String queryString = "FROM Book";
-
         Query<Book> query = entityManager.createQuery(queryString);
         bookQuery = query.getResultList();
         entityManager.close();
-        return bookQuery.toArray(new Book[1]);
+        return bookQuery.toArray(new Book[0]);
     }
 
     @Override
@@ -181,11 +174,10 @@ public class MediaServiceImplementation implements MediaService {
         entityManager.beginTransaction();
         List<Disc> discQuery;
         String queryString = "FROM Disc";
-
         Query<Disc> query = entityManager.createQuery(queryString);
         discQuery = query.getResultList();
         entityManager.close();
-        return discQuery.toArray(new Disc[1]);
+        return discQuery.toArray(new Disc[0]);
     }
 
     @Override
@@ -242,7 +234,6 @@ public class MediaServiceImplementation implements MediaService {
         if (isbn == null) {
             return false;
         }
-
 
         final int isbnLength = 13;
         if (isbn.length() != isbnLength) {
