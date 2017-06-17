@@ -54,7 +54,7 @@ public class MediaServiceImplementation implements MediaService {
         final boolean contains;
         final Session entityManager = getSession();
         final Transaction transaction = entityManager.beginTransaction();
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        //CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
         final boolean isBook = obj instanceof Book;
 
@@ -78,7 +78,6 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public MediaServiceResult addBook(Book book) {
-
         if (book == null) {
             return MediaServiceResult.FORBIDDEN;
         }
@@ -98,11 +97,8 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.ALREADY_EXISTS;
         }
 
-        //getBooksCollection().add(book);
         insert(b);
         System.out.println("MediaServiceResult >>> addBook() -> book has been added");
-        System.out.println("MediaServiceResult >>> addBook() -> current size "
-                + getBooksCollection().size());
 
         return MediaServiceResult.OK;
     }
@@ -134,10 +130,11 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public MediaServiceResult updateBook(Book b) {
-        Book book = new Book(b);
-        if (book == null) {
+        if (b == null) {
             return MediaServiceResult.FORBIDDEN;
         }
+        Book book = new Book(b);
+
         Book toBeUpdated = (Book) getBook(book.getIsbn());
 
         if (toBeUpdated == null) {
@@ -151,10 +148,11 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public MediaServiceResult updateDisc(Disc d) {
-        Disc disc = new Disc(d);
-        if (disc == null) {
+        if (d == null) {
             return MediaServiceResult.FORBIDDEN;
         }
+        Disc disc = new Disc(d);
+
         Disc toBeUpdated = (Disc) getDisc(disc.getBarcode());
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_BARCODE;
@@ -165,7 +163,6 @@ public class MediaServiceImplementation implements MediaService {
 
         return MediaServiceResult.OK;
     }
-
 
     @Override
     public Medium[] getBooks() {
@@ -183,14 +180,15 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium[] getDiscs() {
+        Session entityManager = getSession();
+        entityManager.beginTransaction();
         List<Disc> discQuery;
-        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-        CriteriaQuery<Disc> criteriaQuery = criteriaBuilder.createQuery(Disc.class);
+        String queryString = "FROM Disc";
 
-        Query<Disc> query = getSession().createQuery(criteriaQuery);
+        Query<Disc> query = entityManager.createQuery(queryString);
         discQuery = query.getResultList();
 
-        return discQuery.toArray(new Disc[0]);
+        return discQuery.toArray(new Disc[1]);
     }
 
     @Override
