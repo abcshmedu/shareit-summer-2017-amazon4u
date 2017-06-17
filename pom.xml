@@ -141,7 +141,7 @@
 
         <resources>
             <resource>
-                <directory>src/main/java/edu/hm/shareit/config</directory>
+                <directory>src/main/java/edu/hm/shareit/config/</directory>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>

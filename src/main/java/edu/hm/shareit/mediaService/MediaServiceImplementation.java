@@ -52,17 +52,21 @@ public class MediaServiceImplementation implements MediaService {
 
     private boolean contains(Object obj) {
         final boolean contains;
-        try {
-            final Session entityManager = getSession();
-            final Transaction transaction = entityManager.beginTransaction();
-            contains = entityManager.contains(obj);
-            transaction.commit();
-            entityManager.close();
-            return contains;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        throw new IllegalStateException();
+        final Session entityManager = getSession();
+        final Transaction transaction = entityManager.beginTransaction();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+        Class<?> clazz;
+
+        if(obj instanceof Book) clazz = Book.class;
+        else if(obj instanceof Disc) clazz = Disc.class;
+        else throw new IllegalArgumentException();
+
+        CriteriaQuery<?> query = builder.createQuery(clazz);
+        Root<Person> root = query.from(Person.class);
+        query.where(builder.equal(root.get("firstName"), "Neville"));
+        Query<Person> q = entityManager.createQuery(query);
+        List<Person> persons = q.getResultList();
     }
 
     @Override
