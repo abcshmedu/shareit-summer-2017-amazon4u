@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MediaServiceImplementation implements MediaService {
 
-    private static final SessionFactory session = new Configuration().configure().buildSessionFactory();
+    private static SessionFactory session = new Configuration().configure().buildSessionFactory();
 
     private Session getSession() {
         return this.session.getCurrentSession();
@@ -206,14 +206,19 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public void purge() {
+        this.session = new Configuration().configure().buildSessionFactory();
+        /*
         Session entityManager = getSession();
+        final Transaction transaction = entityManager.beginTransaction();
         Query<Book> deleteBooks = entityManager.createQuery("DELETE FROM Book");
         Query<Disc> deleteDiscs = entityManager.createQuery("DELETE FROM Disc");
 
         deleteBooks.getResultList();
         deleteDiscs.getResultList();
+        transaction.commit();
 
         entityManager.close();
+        */
     }
 
     /**

@@ -23,8 +23,8 @@ import static org.junit.Assert.*;
 
 
 public class MediaResourceTest {
-    static final Book BOOK = new Book("title","author","978-3551551672");
-    static final Book ANOTHER_BOOK = new Book("first","author2","978-3551551689");
+    static final Book BOOK = new Book("title","author","9783551551672");
+    static final Book ANOTHER_BOOK = new Book("first","author2","9783551551689");
     static final Disc DISC = new Disc("title","director","1111111111111",0);
     static final Disc ANOTHER_DISC = new Disc("anotherTitle", "anotherAuthor", "2222222222222", 6);
     static final String APP_URL = "/";
@@ -170,7 +170,7 @@ public class MediaResourceTest {
         reset();
         DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(DISC,MediaType.APPLICATION_JSON_TYPE));
         DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(ANOTHER_DISC,MediaType.APPLICATION_JSON_TYPE));
-        String want = convertToJson(new Disc[]{ANOTHER_DISC,DISC});
+        String want = convertToJson(new Disc[]{DISC,ANOTHER_DISC});
         Response response = DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").get();
         String have = response.readEntity(String.class);
         assertEquals(want,have);
