@@ -6,6 +6,7 @@ import edu.hm.shareit.media.Medium;
 import edu.hm.shareit.mediaService.MediaService;
 import edu.hm.shareit.mediaService.MediaServiceImplementation;
 import edu.hm.shareit.mediaService.MediaServiceResult;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -17,6 +18,12 @@ import static org.junit.Assert.assertEquals;
 public class MediaServiceImplementationTest {
     private static final Book BOOK = new Book("title", "author", "978-3551551672");
     private static final Disc DISC = new Disc("Never gonna give you up", "Rick Astley", "1111111111111", 0);
+
+
+    @Before
+    public void reset() {
+        new MediaServiceImplementation().purge();
+    }
 
     @Test
     public void addNewBook() throws Exception {
