@@ -41,7 +41,7 @@ public class Book extends Medium {
             throw new NullPointerException();
         }
         this.author = author;
-        this.isbn = isbn;
+        this.isbn = isbn.replaceAll("-","");
     }
 
     /**

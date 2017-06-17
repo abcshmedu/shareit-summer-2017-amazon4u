@@ -45,7 +45,7 @@ public class Disc extends Medium {
         if (barcode == null || director == null) {
             throw new NullPointerException();
         }
-        this.barcode = barcode;
+        this.barcode = barcode.replaceAll("-","");
         this.director = director;
         this.fsk = fsk;
     }

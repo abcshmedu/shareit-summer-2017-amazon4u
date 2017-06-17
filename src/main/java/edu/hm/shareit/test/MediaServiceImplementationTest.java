@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  * Test class for MediaServiceImplementation
  */
 public class MediaServiceImplementationTest {
-    private static final Book BOOK = new Book("title", "author", "978-3551551672");
+    private static final Book BOOK = new Book("title", "author", "9783551551672");
     private static final Disc DISC = new Disc("Never gonna give you up", "Rick Astley", "1111111111111", 0);
 
 
@@ -95,7 +95,7 @@ public class MediaServiceImplementationTest {
         Book anotherBook = new Book("anotherTitle", "anotherAuthor", "978-3-551-55900-5");
         sut.addBook(BOOK);
         sut.addBook(anotherBook);
-        Medium[] wanted = {anotherBook, BOOK}; // in this order, because it is sorted
+        Medium[] wanted = {BOOK, new Book(anotherBook)};
         Medium[] have = sut.getBooks();
         assertArrayEquals(wanted, have);
     }
@@ -169,7 +169,7 @@ public class MediaServiceImplementationTest {
         Disc anotherDisc = new Disc("anotherTitle", "Astley", "2222222222222", 0);
         sut.addDisc(DISC);
         sut.addDisc(anotherDisc);
-        Medium[] wanted = {anotherDisc, DISC}; // in this order, because it is sorted
+        Medium[] wanted = {DISC, new Disc(anotherDisc)};
         Medium[] have = sut.getDiscs();
         assertArrayEquals(wanted, have);
     }
