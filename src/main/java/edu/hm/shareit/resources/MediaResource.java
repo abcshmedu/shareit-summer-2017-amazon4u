@@ -28,15 +28,18 @@ import javax.ws.rs.client.Client;
 @Path("media")
 public class MediaResource implements Serializable {
 
-    private MediaService mediaService;
+
+    public MediaServiceImplementation mediaService;
+
 
 
 
     @Inject
-    public MediaResource(MediaService mediaService) {
+    public MediaResource(MediaServiceImplementation mediaService) {
         System.out.println("new instance of MediaResource");
         this.mediaService = mediaService;
     }
+
 
     /**
      * Creates a book (not an exemplar).

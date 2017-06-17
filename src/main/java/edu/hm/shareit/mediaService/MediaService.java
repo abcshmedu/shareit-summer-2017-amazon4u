@@ -5,6 +5,7 @@ import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
 
+
 /**
  * A MediaService interface for Books and Discs.
  */

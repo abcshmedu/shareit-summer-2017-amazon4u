@@ -7,10 +7,13 @@ import javax.persistence.*;
  * A class for books.
  */
 @Entity
-//@Table(name="TBook")
+@Table(name="TBook")
 public class Book extends Medium {
+
+    @Column(name ="Author")
     private String author;
     @Id
+    @Column(name = "Isbn")
     private final String isbn;
 
     /**

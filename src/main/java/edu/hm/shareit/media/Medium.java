@@ -6,15 +6,15 @@ import java.io.Serializable;
 /**
  * Abstract class for media with title.
  */
-@Entity
-@Table(name = "TMedium")
-@Inheritance(strategy = InheritanceType.JOINED)
+
+//@Table(name = "TMedium")
+@MappedSuperclass
 public abstract class Medium implements Serializable {
 
     /**
      * Title of the medium.
      */
-    @Column(name = "title")
+    @Column(name = "Title")
     private String title;
 
 
