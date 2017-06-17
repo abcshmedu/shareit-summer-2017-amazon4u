@@ -17,7 +17,6 @@
         <property name="hbm2ddl.auto">create</property>
         <property name="transaction.auto_close_session">true</property>
 
-
         <mapping class="edu.hm.shareit.media.Medium" />
         <mapping class="edu.hm.shareit.media.Book" />
         <mapping class="edu.hm.shareit.media.Disc" />
