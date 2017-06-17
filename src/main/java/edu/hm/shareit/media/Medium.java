@@ -1,5 +1,7 @@
 package edu.hm.shareit.media;
 
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -7,8 +9,9 @@ import java.io.Serializable;
  * Abstract class for media with title.
  */
 
-//@Table(name = "TMedium")
+@Table(name = "TMedium")
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Medium implements Serializable {
 
     /**
@@ -29,6 +32,7 @@ public abstract class Medium implements Serializable {
             throw new NullPointerException();
         }
         this.title = title;
+
     }
 
     /**
@@ -73,15 +77,5 @@ public abstract class Medium implements Serializable {
         return title.hashCode();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

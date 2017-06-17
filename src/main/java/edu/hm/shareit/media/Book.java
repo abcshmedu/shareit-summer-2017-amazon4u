@@ -1,6 +1,8 @@
 package edu.hm.shareit.media;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 /**
@@ -12,9 +14,13 @@ public class Book extends Medium {
 
     @Column(name ="Author")
     private String author;
+
     @Id
-    @Column(name = "Isbn")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fooIdSeq")
+    @SequenceGenerator(name = "fooIdSeq", sequenceName = "SQ_FOO_ID", allocationSize = 10)
     private final String isbn;
+
+
 
     /**
      * Default constructor for Jackson.
