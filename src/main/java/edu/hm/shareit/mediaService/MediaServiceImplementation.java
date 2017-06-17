@@ -23,10 +23,10 @@ public class MediaServiceImplementation implements MediaService {
     private final Collection<Book> books = new HashSet<>();
     private final Collection<Disc> discs = new HashSet<>();
 
-    private final SessionFactory session;
+    private static final SessionFactory session = new Configuration().configure().buildSessionFactory();
 
     public MediaServiceImplementation() {
-        this.session = new Configuration().configure().buildSessionFactory();
+        //this.session = new Configuration().configure().buildSessionFactory();
     }
 
     private Session getSession() {
@@ -36,9 +36,11 @@ public class MediaServiceImplementation implements MediaService {
     private void insert(Object toBeInserted) {
         try (Session entityManager = getSession()) {
             final Transaction transaction = entityManager.beginTransaction();
+            System.out.println(toBeInserted.toString());
             entityManager.save(toBeInserted);
             //entityManager.persist(toBeInserted);
             transaction.commit();
+            entityManager.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,16 +148,15 @@ public class MediaServiceImplementation implements MediaService {
     @Override
     public Medium[] getBooks() {
         Session entityManager = getSession();
-        final Transaction transaction = entityManager.beginTransaction();
+        entityManager.beginTransaction();
         List<Book> bookQuery;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        String queryString = "FROM TBook";
 
-        //CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(queryString);
+        String queryString = "FROM Book";
+
         Query<Book> query = entityManager.createQuery(queryString);
         bookQuery = query.getResultList();
 
-        return bookQuery.toArray(new Book[0]);
+        return bookQuery.toArray(new Book[1]);
     }
 
     @Override
