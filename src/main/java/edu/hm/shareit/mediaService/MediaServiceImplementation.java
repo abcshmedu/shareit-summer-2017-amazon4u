@@ -56,17 +56,29 @@ public class MediaServiceImplementation implements MediaService {
         final Transaction transaction = entityManager.beginTransaction();
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-        Class<?> clazz;
+        final boolean isBook = obj instanceof Book;
 
-        if(obj instanceof Book) clazz = Book.class;
-        else if(obj instanceof Disc) clazz = Disc.class;
-        else throw new IllegalArgumentException();
+        final String queryString;
+        if (isBook) {
+            queryString = "FROM Book";
+        } else
+            queryString = "FROM Disc";
 
-        CriteriaQuery<?> query = builder.createQuery(clazz);
-        Root<Person> root = query.from(Person.class);
-        query.where(builder.equal(root.get("firstName"), "Neville"));
-        Query<Person> q = entityManager.createQuery(query);
-        List<Person> persons = q.getResultList();
+
+        Query<Book> query = entityManager.createQuery(queryString);
+
+        if (isBook) {
+            List<Book> bookQuery = query.getResultList();
+            contains = bookQuery.contains((Book)obj);
+
+        } else {
+            List<Book> discQuery = query.getResultList();
+            contains = discQuery.contains((Disc)obj);
+
+
+        }
+
+        return contains;
     }
 
     @Override

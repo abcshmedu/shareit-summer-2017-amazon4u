@@ -14,9 +14,7 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Medium implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "fooIdSeq")
-    @SequenceGenerator(name = "fooIdSeq", sequenceName = "SQ_FOO_ID", allocationSize = 10)
+
     private int id;
     /**
      * Title of the medium.
