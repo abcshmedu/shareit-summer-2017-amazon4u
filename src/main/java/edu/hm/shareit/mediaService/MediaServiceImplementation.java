@@ -3,6 +3,7 @@ package edu.hm.shareit.mediaService;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
+import jdk.nashorn.internal.objects.NativeJava;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -136,7 +137,6 @@ public class MediaServiceImplementation implements MediaService {
         Book book = new Book(b);
 
         Book toBeUpdated = (Book) getBook(book.getIsbn());
-
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_ISBN;
         }
