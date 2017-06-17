@@ -53,6 +53,7 @@ public class MediaResource implements Serializable {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createBook(Book book, @Context HttpHeaders headers) {
+        if(book == null) return MediaServiceResult.FORBIDDEN.getResponse();
         if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
@@ -74,6 +75,7 @@ public class MediaResource implements Serializable {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createDisc(Disc disc, @Context HttpHeaders headers) {
+        if(disc == null) return MediaServiceResult.FORBIDDEN.getResponse();
         if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
@@ -175,6 +177,7 @@ public class MediaResource implements Serializable {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateBook(Book book, @PathParam("isbn") String isbn, @Context HttpHeaders headers) {
+        if(book == null) return MediaServiceResult.FORBIDDEN.getResponse();
         if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
@@ -198,6 +201,7 @@ public class MediaResource implements Serializable {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateDisc(Disc disc, @PathParam("barcode") String barcode, @Context HttpHeaders headers) {
+        if(disc == null) return MediaServiceResult.FORBIDDEN.getResponse();
         if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
@@ -249,10 +253,7 @@ public class MediaResource implements Serializable {
         WebTarget authTarget = ClientBuilder.newClient().target("https://ancient-reaches-74529.herokuapp.com/").path("shareit/auth/authorize");
         Response response = authTarget.request(MediaType.APPLICATION_JSON_TYPE).header("Token", token).get();
         System.out.println("MediaResource >>> isValid >>> Response: " + response.getStatus());
-        if (response.getStatus() == 200) {
-            return true;
-        }
-        return false;
+        return response.getStatus() == 200;
     }
 
 
