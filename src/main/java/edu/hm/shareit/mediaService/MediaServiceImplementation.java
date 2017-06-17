@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +36,8 @@ public class MediaServiceImplementation implements MediaService {
     private void insert(Object toBeInserted) {
         try (Session entityManager = getSession()) {
             final Transaction transaction = entityManager.beginTransaction();
-            entityManager.persist(toBeInserted);
+            entityManager.save(toBeInserted);
+            //entityManager.persist(toBeInserted);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,6 +82,7 @@ public class MediaServiceImplementation implements MediaService {
 
         return MediaServiceResult.OK;
     }
+
 
     @Override
     public MediaServiceResult addDisc(Disc disc) {
@@ -138,6 +141,7 @@ public class MediaServiceImplementation implements MediaService {
 
         return MediaServiceResult.OK;
     }
+
 
     @Override
     public Medium[] getBooks() {

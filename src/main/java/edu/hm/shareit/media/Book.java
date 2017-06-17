@@ -15,9 +15,7 @@ public class Book extends Medium {
     @Column(name ="Author")
     private String author;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fooIdSeq")
-    @SequenceGenerator(name = "fooIdSeq", sequenceName = "SQ_FOO_ID", allocationSize = 10)
+
     private final String isbn;
 
 
