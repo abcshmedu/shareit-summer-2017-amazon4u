@@ -145,11 +145,14 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public Medium[] getBooks() {
+        Session entityManager = getSession();
+        final Transaction transaction = entityManager.beginTransaction();
         List<Book> bookQuery;
-        CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        String queryString = "FROM TBook";
 
-        Query<Book> query = getSession().createQuery(criteriaQuery);
+        //CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(queryString);
+        Query<Book> query = entityManager.createQuery(queryString);
         bookQuery = query.getResultList();
 
         return bookQuery.toArray(new Book[0]);
