@@ -61,16 +61,13 @@ public class MediaServiceImplementation implements MediaService {
         final String queryString;
         if (isBook) {
             queryString = "FROM Book";
-        } else
-            queryString = "FROM Disc";
-
-        Query<Book> query = entityManager.createQuery(queryString);
-
-        if (isBook) {
+            Query<Book> query = entityManager.createQuery(queryString);
             List<Book> bookQuery = query.getResultList();
             contains = bookQuery.contains((Book)obj);
         } else {
-            List<Book> discQuery = query.getResultList();
+            queryString = "FROM Disc";
+            Query<Disc> query = entityManager.createQuery(queryString);
+            List<Disc> discQuery = query.getResultList();
             contains = discQuery.contains((Disc)obj);
         }
 
