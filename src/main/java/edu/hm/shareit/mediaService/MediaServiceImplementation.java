@@ -34,7 +34,6 @@ public class MediaServiceImplementation implements MediaService {
             final Transaction transaction = entityManager.beginTransaction();
             System.out.println(toBeInserted.toString());
             entityManager.save(toBeInserted);
-            //entityManager.persist(toBeInserted);
             transaction.commit();
             entityManager.close();
         } catch (Exception e) {
@@ -45,8 +44,9 @@ public class MediaServiceImplementation implements MediaService {
     private void update(Object toBeUpdated) {
         try (final Session entityManager = getSession()) {
             Transaction transaction = entityManager.beginTransaction();
-            entityManager.merge(toBeUpdated);
+            entityManager.update(toBeUpdated);
             transaction.commit();
+            entityManager.close();
         }
     }
 
@@ -124,7 +124,7 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.ALREADY_EXISTS;
         }
         insert(d);
-        //getDiscsCollection().add(disc);
+
         return MediaServiceResult.OK;
     }
 
@@ -140,9 +140,8 @@ public class MediaServiceImplementation implements MediaService {
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_ISBN;
         }
-        toBeUpdated.setAuthor(book.getAuthor());
-        toBeUpdated.setTitle(book.getTitle());
 
+        update(book);
         return MediaServiceResult.OK;
     }
 
@@ -157,9 +156,7 @@ public class MediaServiceImplementation implements MediaService {
         if (toBeUpdated == null) {
             return MediaServiceResult.UNMATCHING_BARCODE;
         }
-        toBeUpdated.setTitle(disc.getTitle());
-        toBeUpdated.setDirector(disc.getDirector());
-        toBeUpdated.setFsk(disc.getFsk());
+        update(disc);
 
         return MediaServiceResult.OK;
     }
@@ -174,7 +171,7 @@ public class MediaServiceImplementation implements MediaService {
 
         Query<Book> query = entityManager.createQuery(queryString);
         bookQuery = query.getResultList();
-
+        entityManager.close();
         return bookQuery.toArray(new Book[1]);
     }
 
@@ -187,7 +184,7 @@ public class MediaServiceImplementation implements MediaService {
 
         Query<Disc> query = entityManager.createQuery(queryString);
         discQuery = query.getResultList();
-
+        entityManager.close();
         return discQuery.toArray(new Disc[1]);
     }
 
