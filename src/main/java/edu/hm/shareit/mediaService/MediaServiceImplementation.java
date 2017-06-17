@@ -25,10 +25,6 @@ public class MediaServiceImplementation implements MediaService {
 
     private static final SessionFactory session = new Configuration().configure().buildSessionFactory();
 
-    public MediaServiceImplementation() {
-        //this.session = new Configuration().configure().buildSessionFactory();
-    }
-
     private Session getSession() {
         return this.session.getCurrentSession();
     }
@@ -54,6 +50,21 @@ public class MediaServiceImplementation implements MediaService {
         }
     }
 
+    private boolean contains(Object obj) {
+        final boolean contains;
+        try {
+            final Session entityManager = getSession();
+            final Transaction transaction = entityManager.beginTransaction();
+            contains = entityManager.contains(obj);
+            transaction.commit();
+            entityManager.close();
+            return contains;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        throw new IllegalStateException();
+    }
+
     @Override
     public MediaServiceResult addBook(Book book) {
 
@@ -71,7 +82,7 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.ILLEGAL_ISBN;
         }
 
-        if (getBooksCollection().contains(b)) {
+        if (contains(b)) {
             System.out.println("MediaServiceResult >>> addBook() -> Duplicate found");
             return MediaServiceResult.ALREADY_EXISTS;
         }
@@ -102,7 +113,7 @@ public class MediaServiceImplementation implements MediaService {
             return MediaServiceResult.ILLEGAL_BARCODE;
         }
 
-        if (getDiscsCollection().contains(d)) {
+        if (contains(d)) {
             return MediaServiceResult.ALREADY_EXISTS;
         }
         insert(d);

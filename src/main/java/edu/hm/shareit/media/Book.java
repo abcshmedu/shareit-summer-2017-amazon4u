@@ -15,7 +15,7 @@ public class Book extends Medium {
     @Column(name ="Author")
     private String author;
 
-
+    @Id
     private final String isbn;
 
 
