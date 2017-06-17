@@ -222,7 +222,7 @@ public class MediaResource implements Serializable {
         if (!isValid(headers)) {
             return MediaServiceResult.FORBIDDEN.getResponse();
         }
-        this.mediaService = new MediaServiceImplementation();
+
         System.out.println("PURGE ALL");
         return MediaServiceResult.OK.getResponse();
     }

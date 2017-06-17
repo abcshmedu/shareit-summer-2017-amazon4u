@@ -21,8 +21,6 @@ import java.util.List;
  * The implementation of the MediaService interface.
  */
 public class MediaServiceImplementation implements MediaService {
-    private final Collection<Book> books = new HashSet<>();
-    private final Collection<Disc> discs = new HashSet<>();
 
     private static final SessionFactory session = new Configuration().configure().buildSessionFactory();
 
@@ -206,22 +204,16 @@ public class MediaServiceImplementation implements MediaService {
         return result;
     }
 
-    /**
-     * Getter for the collection version of books.
-     *
-     * @return The books.
-     */
-    protected Collection<Book> getBooksCollection() {
-        return books;
-    }
+    @Override
+    public void purge() {
+        Session entityManager = getSession();
+        Query<Book> deleteBooks = entityManager.createQuery("DELETE FROM Book");
+        Query<Disc> deleteDiscs = entityManager.createQuery("DELETE FROM Disc");
 
-    /**
-     * Getter for the collection version of discs.
-     *
-     * @return The discs
-     */
-    protected Collection<Disc> getDiscsCollection() {
-        return discs;
+        deleteBooks.getResultList();
+        deleteDiscs.getResultList();
+
+        entityManager.close();
     }
 
     /**

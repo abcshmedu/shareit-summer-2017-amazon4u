@@ -64,4 +64,6 @@ public interface MediaService {
      * @return The requested disc or null if not found.
      */
     Medium getDisc(String barcode);
+
+    void purge();
 }
