@@ -183,7 +183,7 @@ public class MediaServiceImplementation implements MediaService {
         final Book[] books = (Book[]) getBooks();
         Book result = null;
         for (Book book : books) {
-            if (book.getIsbn().equals(isbn)) {
+            if (book.getIsbn().equals(isbn.replace("-",""))) {
                 result = book;
                 break;
             }
@@ -196,7 +196,7 @@ public class MediaServiceImplementation implements MediaService {
         final Disc[] discs = (Disc[]) getDiscs();
         Disc result = null;
         for (Disc disc : discs) {
-            if (disc.getBarcode().equals(barcode)) {
+            if (disc.getBarcode().equals(barcode.replace("-",""))) {
                 result = disc;
                 break;
             }

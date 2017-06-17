@@ -170,7 +170,7 @@ public class MediaResourceTest {
         reset();
         DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(DISC,MediaType.APPLICATION_JSON_TYPE));
         DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").post(Entity.entity(ANOTHER_DISC,MediaType.APPLICATION_JSON_TYPE));
-        String want = convertToJson(new Disc[]{DISC,ANOTHER_DISC});
+        String want = convertToJson(new Disc[]{ANOTHER_DISC,DISC});
         Response response = DISC_TARGET.request(MediaType.APPLICATION_JSON_TYPE).header("Token","DebugToken").get();
         String have = response.readEntity(String.class);
         assertEquals(want,have);
