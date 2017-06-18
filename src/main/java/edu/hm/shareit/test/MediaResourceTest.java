@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 
 public class MediaResourceTest {
+
     static final Book BOOK = new Book("title","author","9783551551672");
     static final Book ANOTHER_BOOK = new Book("first","author2","9783551551689");
     static final Disc DISC = new Disc("title","director","1111111111111",0);
