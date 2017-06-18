@@ -29,7 +29,7 @@ public class BasicTest {
     private Transaction tx;
 
     // dirty trick to store lecture's id for demonstration purposes
-    private static long id;
+    private static String barcode;
 
     public BasicTest() {
         injector.injectMembers(this);
@@ -108,52 +108,8 @@ public class BasicTest {
         String queryString = "from Book where author like '%Rowling%'";
         org.hibernate.query.Query query = entityManager.createQuery(queryString);
         List<Book> list = query.list();
-        assertEquals(1, list.size());
+        assertEquals(2, list.size());
     }
-
-    @Test
-    public void testLoadDisc() {
-        Disc disc = (Disc) entityManager.get(Disc.class, id);
-        assertNotNull(disc);
-    }
-
-
-/*
-
-    @Test(expected=org.hibernate.LazyInitializationException.class)
-    public void testLazyLoading() {
-        Lecture lecture = (Lecture) entityManager.get(Lecture.class, lectureId);
-        assertNotNull(lecture);
-        entityManager.close();
-        List<Teacher> teachers = lecture.getTeachers();
-        assertEquals(2, teachers.size());
-    }
-
-    @Test
-    public void testAllPersonsWithCriteria() {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Person> query = criteriaBuilder.createQuery(Person.class);
-        CriteriaQuery<Person> root = query.select(query.from(Person.class));
-
-        Query<Person> q = entityManager.createQuery(query);
-        List<Person> persons = q.getResultList();
-        assertEquals(3, persons.size());
-    }
-
-    @Test
-    public void testPersonForNameCriteria() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Person> query = builder.createQuery(Person.class);
-        Root<Person> root = query.from(Person.class);
-
-        query.where(builder.equal(root.get("firstName"), "Neville"));
-
-        Query<Person> q = entityManager.createQuery(query);
-        List<Person> persons = q.getResultList();
-        assertEquals(1, persons.size());
-    }
-*/
-
 
 
 }
