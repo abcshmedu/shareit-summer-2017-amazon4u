@@ -3,18 +3,12 @@ package edu.hm.shareit.mediaService;
 import edu.hm.shareit.media.Book;
 import edu.hm.shareit.media.Disc;
 import edu.hm.shareit.media.Medium;
-import jdk.nashorn.internal.objects.NativeJava;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -22,10 +16,10 @@ import java.util.List;
  */
 public class MediaServiceImplementation implements MediaService {
 
-    private static SessionFactory session = new Configuration().configure().buildSessionFactory();
+    private static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     private Session getSession() {
-        return this.session.getCurrentSession();
+        return this.sessionFactory.getCurrentSession();
     }
 
     private void insert(Object toBeInserted) {
@@ -206,7 +200,7 @@ public class MediaServiceImplementation implements MediaService {
 
     @Override
     public void purge() {
-        this.session = new Configuration().configure().buildSessionFactory();
+        this.sessionFactory = new Configuration().configure().buildSessionFactory();
         /*
         Session entityManager = getSession();
         final Transaction transaction = entityManager.beginTransaction();
