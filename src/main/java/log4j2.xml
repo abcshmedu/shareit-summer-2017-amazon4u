@@ -1,13 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
+
     <Appenders>
-        <File name="html" fileName="amazon4u.html" append="false">
-            <HTMLLayout title="RickRolled"/>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+        </Console>
+        <File name="html" fileName="logging.html" append="false">
+            <HTMLLayout title="Hibernate ShareIt" />
         </File>
     </Appenders>
+
     <Loggers>
-        <Logger name="edu.hm.shareit" level="ALL" additivity="false ">
+        <Logger name="org.apache.log4j.xml" level="trace"/>
+        <Root level="info">
+            <!--<AppenderRef ref="STDOUT"/>--><!-- Enable this for additional logging to stdout -->
             <AppenderRef ref="html"/>
-        </Logger>
+        </Root>
     </Loggers>
+
 </Configuration>
